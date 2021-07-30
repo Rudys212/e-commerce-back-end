@@ -6,25 +6,18 @@ const ProductTag = require("./ProductTag");
 
 // Products belongsTo Category
 Product.belongsTo(Category, {
-  through: {
-    model: Tag,
-    unique: false,
-  },
   as: "product_category",
 });
 // Categories have many Products
-Category.belongsTo(Product, {
-  through: {
-    model: Tag,
-    unique: false,
-  },
-  as: categories_products,
+Category.hasMany(Product, {
+  as: "categories_products",
 });
 // Products belongToMany Tags (through ProductTag)
 Product.belongsToMany(Tag, {
   through: {
     model: ProductTag,
     unique: false,
+    foreignKey: "product_id",
   },
   as: "productTag",
 });
@@ -33,6 +26,7 @@ Tag.belongsToMany(Product, {
   through: {
     model: ProductTag,
     unique: false,
+    foreignKey: "tag_id",
   },
   as: "tagProduct",
 });
