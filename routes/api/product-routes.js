@@ -20,10 +20,7 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
-  Product.findByPk({
-    where: {
-      id: req.params.id,
-    },
+  Product.findByPk(req.params.id, {
     include: [
       { model: Category, as: "product_category" },
       { model: Tag, as: "productTag" },
@@ -32,7 +29,6 @@ router.get("/:id", (req, res) => {
     .then((findCategory) => res.status(200).json(findCategory))
     .catch((err) => res.status(500).json(err));
 });
-
 // create new product
 router.post("/", (req, res) => {
   /* req.body should look like this...
@@ -80,6 +76,7 @@ router.put("/:id", (req, res) => {
     .then((productTags) => {
       // get list of current tag_ids
       const productTagIds = productTags.map(({ tag_id }) => tag_id);
+      console.log("valueProductIds", req.body.tagIds);
       // create filtered list of new tag_ids
       const newProductTags = req.body.tagIds
         .filter((tag_id) => !productTagIds.includes(tag_id))
